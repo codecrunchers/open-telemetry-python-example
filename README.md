@@ -1,4 +1,4 @@
-Simple app forked from OTL and update to use an auto instrumented python client
+Simple app forked from OTL and updated to use an auto instrumented python client
 
 This auto instruments a Python Application for distributed tracing. Configures it for metric and logs exports with minimal code. An OTEL Collector sits in between the Apps , (There is a Go Server) and then exports this OTEL format data to the awaiting clients. 
 
