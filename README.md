@@ -32,7 +32,7 @@ flask run #(or use cmd from Dockerfile)
 
 
 ![Jaeger Traces](./docs/Jaeger.png)
-![Prometheus metrics]("./docs/Prometheus.png")
-![Loki - Grafana]("./docs/Grafana-Logs.png")
-![Prometheus Data Sources - Grafana]("./docs/Grafana-Prom.png")
+![Prometheus metrics](./docs/Prometheus.png)
+![Loki - Grafana](./docs/Grafana-Logs.png)
+![Prometheus Data Sources - Grafana](./docs/Grafana-Prom.png)
 
