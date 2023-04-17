@@ -64,9 +64,6 @@ app = Flask(__name__)
 from flask.logging import default_handler
 root = logging.getLogger()
 root.addHandler(handler)
-#root.addHandler(default_handler)
-
-#app.logger.addHandler(handler)
 
 @app.route("/hello", methods=["GET"])
 def server_request():
