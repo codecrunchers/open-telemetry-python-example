@@ -20,6 +20,8 @@ cd client
 flask run #(or use cmd from Dockerfile)
 ```
 
+The requirements are mostly auto-generated, you add Flask /  Django then run the instrumenter for necesary libs. 
+
 
 ### Services
  - Jaeger (Tracing, Exception Logging) http://localhost:16686/
