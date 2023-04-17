@@ -1,0 +1,101 @@
+services:
+  # Jaeger
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    restart: always
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250"
+    networks:
+      - otel-demo
+
+  # Collector
+  otel-collector:
+    image: ${OTELCOL_IMG}
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - 1888:1888 # pprof extension
+      - 8888:8888 # Prometheus metrics exposed by the collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      - 55679:55679 # zpages extension
+    depends_on:
+      - jaeger-all-in-one
+    networks:
+      - otel-demo
+
+  demo-client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    restart: always
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-client,application=Lasso
+    depends_on:
+      - demo-server
+    ports:
+      - 5000:5000
+    stdin_open: true   # Add this line into your service
+    tty: true   # Add this line into your service
+    networks:
+      - otel-demo
+
+  demo-server:
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    restart: always
+    environment:
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-server,application=Lasso
+    ports:
+      - "7080"
+    depends_on:
+      - otel-collector
+    networks:
+      - otel-demo
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - otel-demo
+
+  grafana:
+    image: grafana/grafana:7.1.1
+    environment:
+      - "GF_AUTH_DISABLE_LOGIN_FORM=true"
+      - "GF_AUTH_ANONYMOUS_ENABLED=true"
+      - "GF_AUTH_ANONYMOUS_ORG_ROLE=Admin"
+    ports:
+      - "3000:3000"
+    networks:
+      - otel-demo
+
+  loki:
+   image: grafana/loki:v1.3.0
+   volumes:
+      - ./config/loki.yaml:/etc/config/loki.yaml
+   entrypoint:
+      - /usr/bin/loki
+      - -config.file=/etc/config/loki.yaml
+   ports:
+     - "3100:3100"
+   networks:
+    - otel-demo
+
+
+networks:
+  otel-demo:  

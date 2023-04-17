@@ -1,0 +1,67 @@
+receivers:
+   otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"      
+      http:
+        endpoint: "0.0.0.0:4318"      
+   filelog:
+    include: [/var/log/*.log]          
+
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    const_labels:
+      label1: value1
+
+  logging:
+
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+
+  jaeger:
+    endpoint: jaeger-all-in-one:14250
+    tls:
+      insecure: true
+
+processors:
+  batch:
+
+  attributes:
+    actions:
+      - action: insert
+        key: log_file_name
+        from_attribute: log.file.name
+      - action: insert
+        key: loki.attribute.labels
+        value: log_file_name
+  resource:
+    attributes:
+      - action: insert
+        key: loki.resource.labels
+        value: service.name          
+
+
+extensions:
+  health_check:
+  pprof:
+    endpoint: :1888
+  zpages:
+    endpoint: :55679
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, jaeger]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging, prometheus]
+    logs:
+      receivers: [otlp, filelog]
+      processors: [attributes]
+      exporters: [logging, loki]
