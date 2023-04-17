@@ -36,7 +36,7 @@ services:
       context: ./client
     restart: always
     environment:
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-client,application=Lasso
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-client,application=demo
     depends_on:
       - demo-server
     ports:
@@ -54,7 +54,7 @@ services:
     environment:
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=otel-collector:4317
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-server,application=Lasso
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=demo-server,application=demo
     ports:
       - "7080"
     depends_on:
