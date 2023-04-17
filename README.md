@@ -31,7 +31,7 @@ flask run #(or use cmd from Dockerfile)
 ## Screenshots
 
 
-![Jaeger Traces]("./docs/Screenshot 2023-04-17 at 21-30-53 Jaeger UI.png")
+![Jaeger Traces](./docs/Screenshot 2023-04-17 at 21-30-53 Jaeger UI.png)
 ![Prometheus metrics]("./docs/Screenshot 2023-04-17 at 21-32-35 Prometheus Time Series Collection and Processing Server.png")
 ![Loki - Grafana]("./docs/Screenshot 2023-04-17 at 21-32-17 Home - Grafana.png")
 ![Prometheus Data Sources - Grafana]("./docs/Screenshot 2023-04-17 at 22-08-23 Configuration Data Sources - Grafana.png")
