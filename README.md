@@ -1,4 +1,4 @@
-Simple app forked from OTL and update to use an auto instrumented python client
+Simple app forked from OTL and updated to use an auto instrumented python client
 
 This auto instruments a Python Application for distributed tracing. Configures it for metric and logs exports with minimal code. An OTEL Collector sits in between the Apps , (There is a Go Server) and then exports this OTEL format data to the awaiting clients. 
 
@@ -20,6 +20,8 @@ cd client
 flask run #(or use cmd from Dockerfile)
 ```
 
+The requirements are mostly auto-generated, you add Flask /  Django then run the instrumenter for necesary libs. 
+
 
 ### Services
  - Jaeger (Tracing, Exception Logging) http://localhost:16686/
@@ -32,7 +34,7 @@ flask run #(or use cmd from Dockerfile)
 
 
 ![Jaeger Traces](./docs/Jaeger.png)
-![Prometheus metrics]("./docs/Prometheus.png")
-![Loki - Grafana]("./docs/Grafana-Logs.png")
-![Prometheus Data Sources - Grafana]("./docs/Grafana-Prom.png")
+![Prometheus metrics](./docs/Prometheus.png)
+![Loki - Grafana](./docs/Grafana-Logs.png)
+![Prometheus Data Sources - Grafana](./docs/Grafana-Prom.png)
 
